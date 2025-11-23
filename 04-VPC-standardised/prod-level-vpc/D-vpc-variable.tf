@@ -71,6 +71,11 @@ variable "vpc_single_nat_gateway" {
   default = true
 }
 
-
+# VPC business_division
+variable "business_division" {
+  description = "Business Division"
+  type = string 
+  default = "HR"
+}
 
 
