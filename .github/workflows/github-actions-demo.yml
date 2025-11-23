@@ -19,3 +19,33 @@ jobs:
       - run: echo "I am printing all the environmental variables here "
       - name: Print Environment Variables
         run: env
+      
+      - name: Dump GitHub Context
+        run: echo '${{ toJSON(github) }}'
+      
+      - name: Dump Job Context
+        run: echo '${{ toJSON(job) }}'
+      
+      - name: Dump Steps Context
+        run: echo '${{ toJSON(steps) }}'
+      
+      - name: Dump Runner Context
+        run: echo '${{ toJSON(runner) }}'
+      
+      - name: Dump Strategy Context
+        run: echo '${{ toJSON(strategy) }}'
+      
+      - name: Dump Matrix Context
+        run: echo '${{ toJSON(matrix) }}'
+      
+      - name: Dump Needs Context
+        run: echo '${{ toJSON(needs) }}'
+      
+      - name: Dump Secrets Context (Names only - values are masked)
+        run: echo '${{ toJSON(secrets) }}'
+      
+      - name: Dump Inputs Context
+        run: echo '${{ toJSON(inputs) }}'
+      
+      - name: Dump Env Context
+        run: echo '${{ toJSON(env) }}'
