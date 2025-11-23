@@ -3,12 +3,12 @@ name: Terraform Deploy VPC
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - '04-VPC-standardised/prod-level-vpc/**'
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - '04-VPC-standardised/prod-level-vpc/**'
   workflow_dispatch:  # Allows manual trigger
@@ -73,9 +73,9 @@ jobs:
         continue-on-error: false
       
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply --auto-approve tfplan
       
       - name: Terraform Output
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform output
