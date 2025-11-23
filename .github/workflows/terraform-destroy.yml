@@ -1,0 +1,65 @@
+name: Terraform Destroy VPC
+
+on:
+  workflow_dispatch:  # Manual trigger only
+    inputs:
+      confirm:
+        description: 'Type "destroy" to confirm deletion of all infrastructure'
+        required: true
+        default: 'no'
+
+env:
+  TF_VERSION: '1.6.0'
+  AWS_REGION: 'us-east-1'
+  WORKING_DIR: '04-VPC-standardised/prod-level-vpc'
+
+jobs:
+  terraform-destroy:
+    name: 'Terraform Destroy'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+    
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+    
+    steps:
+      - name: Verify Destroy Confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "destroy" ]; then
+            echo "❌ Destroy not confirmed. You must type 'destroy' to proceed."
+            exit 1
+          fi
+          echo "✅ Destroy confirmed. Proceeding with infrastructure deletion..."
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config="profile="
+      
+      - name: Terraform Plan Destroy
+        id: plan
+        run: terraform plan -destroy -no-color -out=destroy.tfplan
+      
+      - name: Terraform Destroy
+        run: terraform apply -auto-approve destroy.tfplan
+      
+      - name: Confirm Destruction
+        run: echo "🗑️ Infrastructure has been destroyed successfully!"
