@@ -9,6 +9,18 @@ terraform {
       version = ">= 5.31"
     }
   }
+  
+  # S3 Backend Configuration for Remote State
+  backend "s3" {
+    bucket         = "kd-boto-s3-bucket"
+    key            = "terraform/vpc/prod-level-vpc/terraform.tfstate"
+    region         = "us-east-1"
+    profile        = "kd"
+    
+    # Optional: Enable state locking with DynamoDB
+    # dynamodb_table = "terraform-state-lock"
+    # encrypt        = true
+  }
 }
 
 # Provider Block

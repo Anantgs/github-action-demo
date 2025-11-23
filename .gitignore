@@ -1,0 +1,22 @@
+# Terraform files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Local .terraform directories
+**/.terraform/
+
+# Variable files that might contain sensitive data
+*.tfvars
+!terraform.tfvars
+!vpc-auto.tfvars
+*.auto.tfvars
